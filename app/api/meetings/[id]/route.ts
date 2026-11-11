@@ -1,3 +1,4 @@
+
 import { getMeetingById } from "@/lib/meetings-db";
 
 interface RouteParams {
@@ -9,13 +10,19 @@ export async function GET(_request: Request, { params }: RouteParams) {
   const meetingId = Number(id);
 
   if (!Number.isInteger(meetingId) || meetingId <= 0) {
-    return Response.json({ error: "Invalid meeting ID" }, { status: 400 });
+    return Response.json(
+      { error: "Invalid meeting ID" },
+      { status: 400 }
+    );
   }
 
-  const meeting = getMeetingById(meetingId);
+  const meeting = await getMeetingById(meetingId);
 
   if (!meeting) {
-    return Response.json({ error: "Meeting not found" }, { status: 404 });
+    return Response.json(
+      { error: "Meeting not found" },
+      { status: 404 }
+    );
   }
 
   return Response.json(meeting, { status: 200 });
