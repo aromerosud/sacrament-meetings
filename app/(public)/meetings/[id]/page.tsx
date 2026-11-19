@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { headers } from "next/headers";
+import { getBaseUrl } from "@/lib/getBaseUrl";
 import { notFound } from "next/navigation";
 import type { SacramentMeeting } from "@/lib/types";
 import MeetingDetail from "@/components/MeetingDetail";
@@ -31,18 +31,11 @@ async function MeetingContent({ params }: MeetingPageProps) {
     notFound();
   }
 
-  const headersList = await headers();
-  const host = headersList.get("host");
-  const protocol = headersList.get("x-forwarded-proto") ?? "http";
+  const baseUrl = await getBaseUrl();
 
-  if (!host) {
-    throw new Error("Unable to determine the request host.");
-  }
-
-  const response = await fetch(
-    `${protocol}://${host}/api/meetings/${meetingId}`,
-    { cache: "no-store" },
-  );
+  const response = await fetch(`${baseUrl}/api/meetings/${meetingId}`, {
+    cache: "no-store",
+  });
 
   if (response.status === 404 || response.status === 400) {
     notFound();

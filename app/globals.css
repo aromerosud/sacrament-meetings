@@ -45,3 +45,46 @@ body {
   font-size: var(--font-size-base);
   min-height: 100vh;
 }
+
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 14px;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  h1 {
+    font-size: 23px !important;
+    margin-bottom: 8px !important;
+  }
+
+  h2 {
+    font-size: 17px !important;
+    margin-top: 10px !important;
+    margin-bottom: 4px !important;
+  }
+
+  p {
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  section {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  * {
+    box-shadow: none !important;
+  }
+}

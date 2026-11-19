@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const links = [
   { href: "/", label: "Home" },
@@ -11,9 +11,7 @@ const links = [
 
 export default function NavLinks() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  const fromCurrent = searchParams.get("source") === "current";
 
   return (
     <nav className="flex flex-wrap items-center gap-6">
@@ -22,9 +20,7 @@ export default function NavLinks() {
           pathname === link.href ||
           (link.href === "/meetings" &&
             pathname.startsWith("/meetings/") &&
-            pathname !== "/meetings/current" &&
-            !fromCurrent) ||
-          (link.href === "/meetings/current" && fromCurrent);
+            pathname !== "/meetings/current");
 
         return (
           <Link
