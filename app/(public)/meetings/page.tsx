@@ -3,6 +3,7 @@ import { getMeetings, getMeetingsTotalPages } from "@/lib/meetings-db";
 import MeetingCard from "@/components/MeetingCard";
 import { MeetingSearch } from "@/components/MeetingSearch";
 import { Pagination } from "@/components/Pagination";
+import Link from "next/link";
 
 interface MeetingsPageProps {
   searchParams?: Promise<{
@@ -25,13 +26,22 @@ export default async function MeetingsPage({
 
   return (
     <section>
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-slate-900">
-          Sacrament Meetings
-        </h1>
-        <p className="text-slate-600 mt-2">
-          Browse the scheduled sacrament meetings for our ward.
-        </p>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">
+            Sacrament Meetings
+          </h1>
+          <p className="text-slate-600 mt-2">
+            Browse the scheduled sacrament meetings for our ward.
+          </p>
+        </div>
+
+        <Link
+          href="/meetings/new"
+          className="inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition-colors text-center"
+        >
+          + Create New Meeting
+        </Link>
       </div>
 
       <div className="mb-6">

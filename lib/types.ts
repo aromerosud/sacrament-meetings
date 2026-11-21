@@ -36,3 +36,13 @@ export interface SacramentMeeting {
   closingHymn: Hymn;
   closingPrayer: string;
 }
+
+export type State = {
+  message: string;
+  errors?: {
+    [key: string]: string[];
+  };
+  values?: {
+    [key: string]: string;
+  };
+};
