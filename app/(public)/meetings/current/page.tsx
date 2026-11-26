@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { connection } from "next/server";
 import { redirect } from "next/navigation";
 import { getMeetingByDate } from "@/lib/meetings-db";
+
+export const metadata: Metadata = {
+  title: "Current Meeting",
+  description:
+    "View the current sacrament meeting agenda, assignments, and program for Los Ficus Ward.",
+};
 
 export default async function CurrentMeetingPage() {
   await connection();

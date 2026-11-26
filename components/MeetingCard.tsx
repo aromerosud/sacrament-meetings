@@ -4,9 +4,10 @@ import { deleteMeeting } from "@/lib/actions";
 
 interface MeetingCardProps {
   meeting: SacramentMeeting;
+  isLoggedIn: boolean;
 }
 
-export default function MeetingCard({ meeting }: MeetingCardProps) {
+export default function MeetingCard({ meeting, isLoggedIn }: MeetingCardProps) {
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     year: "numeric",
     month: "long",
@@ -54,21 +55,26 @@ export default function MeetingCard({ meeting }: MeetingCardProps) {
       >
         View Meeting Details
       </Link>
-      <Link
-        href={`/meetings/${meeting.id}/edit`}
-        prefetch={false}
-        className="mt-3 inline-block rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 transition-colors"
-      >
-        Edit Meeting
-      </Link>
-      <form action={deleteMeeting.bind(null, meeting.id)}>
-        <button
-          type="submit"
-          className="mt-3 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
-        >
-          Delete Meeting
-        </button>
-      </form>
+      {isLoggedIn && (
+        <>
+          <Link
+            href={`/meetings/${meeting.id}/edit`}
+            prefetch={false}
+            className="mt-3 inline-block rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white hover:bg-amber-600 transition-colors"
+          >
+            Edit Meeting
+          </Link>
+
+          <form action={deleteMeeting.bind(null, meeting.id)}>
+            <button
+              type="submit"
+              className="mt-3 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+            >
+              Delete Meeting
+            </button>
+          </form>
+        </>
+      )}
     </article>
   );
 }

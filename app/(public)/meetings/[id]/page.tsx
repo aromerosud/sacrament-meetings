@@ -3,6 +3,13 @@ import { getBaseUrl } from "@/lib/getBaseUrl";
 import { notFound } from "next/navigation";
 import type { SacramentMeeting } from "@/lib/types";
 import MeetingDetail from "@/components/MeetingDetail";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Meeting Details",
+  description:
+    "View the details, assignments, speakers, and agenda of a sacrament meeting for Los Ficus Ward.",
+};
 
 interface MeetingPageProps {
   params: Promise<{ id: string }>;

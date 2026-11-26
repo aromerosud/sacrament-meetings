@@ -2,6 +2,13 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { getMeetingById } from "@/lib/meetings-db";
 import MeetingForm from "@/components/MeetingForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Edit Meeting",
+  description:
+    "Edit the schedule, assignments, and details of a sacrament meeting for Los Ficus Ward.",
+};
 
 interface EditMeetingPageProps {
   params: Promise<{ id: string }>;
@@ -28,7 +35,6 @@ async function EditMeetingContent({ params }: EditMeetingPageProps) {
   }
 
   const meeting = await getMeetingById(meetingId);
- 
 
   if (!meeting) {
     notFound();

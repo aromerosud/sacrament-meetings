@@ -4,6 +4,14 @@ import MeetingCard from "@/components/MeetingCard";
 import { MeetingSearch } from "@/components/MeetingSearch";
 import { Pagination } from "@/components/Pagination";
 import Link from "next/link";
+import { auth } from "@/auth";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Meetings",
+  description:
+    "Browse scheduled sacrament meetings, including dates, presiding leaders, conducting leaders, and meeting details.",
+};
 
 interface MeetingsPageProps {
   searchParams?: Promise<{
@@ -15,6 +23,8 @@ interface MeetingsPageProps {
 export default async function MeetingsPage({
   searchParams,
 }: MeetingsPageProps) {
+  const session = await auth();
+  const isLoggedIn = !!session?.user;
   const params = await searchParams;
   const query = params?.query ?? "";
   const currentPage = Math.max(1, Number(params?.page) || 1);
@@ -36,12 +46,14 @@ export default async function MeetingsPage({
           </p>
         </div>
 
-        <Link
-          href="/meetings/new"
-          className="inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition-colors text-center"
-        >
-          + Create New Meeting
-        </Link>
+        {isLoggedIn && (
+          <Link
+            href="/meetings/new"
+            className="inline-block rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 transition-colors text-center"
+          >
+            + Create New Meeting
+          </Link>
+        )}
       </div>
 
       <div className="mb-6">
@@ -51,7 +63,11 @@ export default async function MeetingsPage({
       {meetings.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {meetings.map((meeting: SacramentMeeting) => (
-            <MeetingCard key={meeting.id} meeting={meeting} />
+            <MeetingCard
+              key={meeting.id}
+              meeting={meeting}
+              isLoggedIn={isLoggedIn}
+            />
           ))}
         </div>
       ) : (

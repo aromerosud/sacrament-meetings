@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { State } from "@/lib/types";
 import { z } from "zod";
+import { auth, signIn, signOut as authSignOut } from "@/auth";
+import { AuthError } from "next-auth";
 
 import {
   addMeeting,
@@ -137,10 +139,19 @@ const MeetingFormSchema = z
     closingPrayer: data.closingPrayer,
   }));
 
+async function requireAuth() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+}
+
 export async function createMeeting(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
+  await requireAuth();
   void prevState;
 
   const formValues: Record<string, string> = Object.fromEntries(
@@ -186,6 +197,7 @@ export async function updateMeeting(
   prevState: State,
   formData: FormData,
 ): Promise<State> {
+  await requireAuth();
   void prevState;
 
   if (!Number.isInteger(id) || id <= 0) {
@@ -240,6 +252,7 @@ export async function updateMeeting(
 }
 
 export async function deleteMeeting(id: number, formData: FormData) {
+  await requireAuth();
   void formData;
 
   if (!Number.isInteger(id) || id <= 0) {
@@ -261,4 +274,35 @@ export async function deleteMeeting(id: number, formData: FormData) {
 
   revalidatePath("/meetings");
   redirect("/meetings");
+}
+
+export async function authenticate(
+  prevState: string | undefined,
+  formData: FormData,
+) {
+  void prevState;
+
+  try {
+    await signIn("credentials", {
+      ...Object.fromEntries(formData),
+      redirectTo: "/meetings",
+    });
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
+        case "CredentialsSignin":
+          return "Invalid email or password.";
+        default:
+          return "Something went wrong.";
+      }
+    }
+
+    throw error;
+  }
+}
+
+export async function logout() {
+  await authSignOut({
+    redirectTo: "/login",
+  });
 }

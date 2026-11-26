@@ -17,8 +17,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sacrament Meetings",
-  description: "Manage and organize sacrament meeting agendas.",
+  title: {
+    default: "Sacrament Meetings | Los Ficus Ward",
+    template: "%s | Sacrament Meetings",
+  },
+  description:
+    "View and manage sacrament meeting schedules, agendas, and assignments for Los Ficus Ward.",
+
+  openGraph: {
+    title: "Sacrament Meetings | Los Ficus Ward",
+    description:
+      "View and manage sacrament meeting schedules, agendas, and assignments for Los Ficus Ward.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
